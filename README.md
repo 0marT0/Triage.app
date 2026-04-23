@@ -2,6 +2,32 @@
 Hypothetical Application designed as a medical questionaire for a hypothetical situation.
 ## Scenario
 You are in a Zombie Apocalypse working inside a Hospital as part of their staff. Someone has discovered a vaccine that works as the cure for the Zombie Virus but even then, said cure has a shelf life with each passing day lowering it's potency. This application will help determine if said patient can be cured or must be quarenteed. 
+
+## Vaccine Details
+Effectiveness Window:
+Fully effective and guaranteed cure up to Stage 3 infection
+Reduced effectiveness at Stage 4
+Significantly reduced effectiveness at Stage 5
+Stage 6 (Full Transformation):
+Only works in extremely rare cases
+Subject must have turned within the last 10 minutes
+Even then, success probability is extremely low
+Shelf Life:
+Outside cooler: 3 days
+Inside cooler: 2 weeks
+
+## Environmental & Biological Factors
+Temperature:
+Hot environments accelerate infection (~24 hours or less)
+Cold environments slow progression, depending on body composition
+Age:
+Elderly: Faster (~15 hours)
+Children (under 16): Slower progression
+Infants: Highly vulnerable, faster infection rates
+Hygiene & Environment:
+Sterile, regularly cleaned environments (e.g., hospitals) reduce spread risk
+Clean households also offer some protection
+
 ## Triage Rules
 Patients are assigned a priority tier. The triage is affected by Age, Hygiene, Medical History, Stage of illness, and Temperature.
 
@@ -18,4 +44,4 @@ The host undergoes complete physiological and cognitive collapse, emerging as a 
 Java 17 or recent
 
 ## Using The App
-On launch the application will ask medial questionare which is quick on point, and understandable for both peiople hosptcal staff and the common person. Once the app has all questions answered it will determin the priority queue for vaccine injections.
+On launch the application will ask medial questionare which is quick on point, and understandable for both people hosptcal staff and the common person. Once the app has all questions answered it will determin the priority queue for vaccine injections.
