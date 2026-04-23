@@ -49,4 +49,4 @@ The host undergoes complete physiological and cognitive collapse, emerging as a 
 Java 17 or recent
 
 ## Using The App
-On launch the application will ask medial questionare which is quick on point, and understandable for both people hosptcal staff and the common person. Once the app has all questions answered it will determin the priority queue for vaccine injections.
+On launch the application will open a menu prompting an action. Then, asks for a main concern following a medical questionnaire which is quick on point, and understandable for both people hosptcal staff and the common person. Once the app has all questions answered it will determine the priority queue for vaccine injections.
