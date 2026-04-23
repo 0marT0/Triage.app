@@ -1,0 +1,151 @@
+/Users/gissellramirez/Library/Java/JavaVirtualMachines/temurin-17.0.16/Contents/Home/bin/java -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=64796 -Dfile.encoding=UTF-8 -classpath /Users/gissellramirez/Desktop/CS 2013/ZombieApp/out/production/ZombieApp TriageQueue
+
+  ╔══════════════════════════════════════════════════════════╗
+  ║      ZOMBIOTRIAGE v1.0 — FIELD HOSPITAL TRIAGE CLI      ║
+  ║              ** TIME-CRITICAL SYSTEM **                 ║
+  ╚══════════════════════════════════════════════════════════╝
+
+  COMMANDS
+  ─────────────────────────────────────────────────────────
+  admit <data>   Admit a new patient  (shortcut: a)
+  vax            Vaccinate highest-priority patient  (v)
+  next           Show next patient + recommendation  (n)
+  queue          Show full priority queue  (q)
+  help           Show admit format guide  (h)
+  quit           Exit  (x)
+
+  QUICK ADMIT FORMAT
+  ─────────────────────────────────────────────────────────
+  admit  <ID>  <age>  <stage 1-6>  [flags]  [mental]  [mins]
+
+  EXAMPLE   admit PT-01 34 2 E H 1
+  EXAMPLE   admit PT-02 8 3              (child, no flags)
+  EXAMPLE   admit PT-03 45 6 T 4 8       (stage 6, 8 mins)
+
+  Type 'help' to see the full field guide at any time.
+
+
+> help
+
+  ╔══════════════════════════════════════════════════════════╗
+  ║                  ADMIT — FIELD GUIDE                    ║
+  ╚══════════════════════════════════════════════════════════╝
+
+  FORMAT:  admit <ID> <age> <stage> [flags] [mental] [mins]
+
+  ── REQUIRED FIELDS ─────────────────────────────────────
+
+  ID      Patient identifier. Any text, no spaces.
+          e.g.  PT-042  or  JOHN  or  BED-7
+
+  age     Patient age in years (1–120).
+          Children under 16 and seniors 65+ are flagged
+          automatically — they have a 15hr timeline vs 24hr.
+
+  stage   Infection stage 1–6.
+          1  Early onset — fully curable
+          2  Mild symptoms — fully curable
+          3  Moderate — fully curable
+          4  Advanced — reduced cure chance
+             NOTE: Stage 2 with throat flag (T) is reclassified
+             as Stage 4 automatically.
+          5  Critical — last resort vaccine only
+          6  Terminal — euthanasia if past 10-min window
+
+  ── OPTIONAL FLAGS (add in any order after stage) ────────
+
+  E       Essential personnel.
+          Doctors, nurses, soldiers, security.
+          Loss of essential staff multiplies casualties.
+
+  H       Hot environment / high body mass.
+          Accelerates zombification — increases urgency.
+
+  T       Throat tightness / breathing difficulty.
+          Indicates possible Stage 2 → Stage 4 misread.
+          System will reclassify automatically if Stage 2.
+
+  S       Sterile environment (hospital / clean home).
+          Reduces spread risk — slightly lowers urgency.
+
+  ── MENTAL HEALTH STATE (0–4, default = 0) ───────────────
+
+  More negative mental state = faster virus spread.
+  Enter a single digit after any flags.
+
+  0   Stable     — no effect on spread
+  1   Anxious    — mild acceleration (x1.25)
+  2   Depressed  — moderate acceleration (x1.50)
+  3   Severe     — strong acceleration (x1.75)
+                   bumps curable patients to Tier 2
+  4   Crisis     — maximum acceleration (x2.00)
+                   treat immediately before state worsens
+
+  ── MINUTES TO TRANSFORMATION (stage 5/6 only) ───────────
+
+  Enter estimated minutes remaining before full zombification.
+  Only relevant for Stage 5 and Stage 6 patients.
+
+  Stage 6 decision logic:
+    <= 10 min  →  VACCINATE (emergency last resort)
+    >  10 min  →  EUTHANIZE (irreversible, contain immediately)
+    unknown    →  EUTHANIZE (assume irreversible)
+
+  ── EXAMPLES ─────────────────────────────────────────────
+
+  admit PT-01 34 2 E H 1
+    ID=PT-01  age=34  stage=2  essential  hot-env  anxious
+
+  admit PT-02 8 3
+    ID=PT-02  age=8  stage=3  (child — auto Tier 1)
+
+  admit PT-03 45 6 T 4 8
+    ID=PT-03  age=45  stage=6  throat-risk  crisis  8-mins
+    → within window: VACCINATE NOW or proceed to euthanasia
+
+  admit PT-04 72 5 S 3 5
+    ID=PT-04  age=72  stage=5  sterile  severe-mental  5-mins
+
+
+> admit PT-01 34 2 E H 1
+
+[ADMITTED] PT-01 → TIER 1 — IMMEDIATE (score: 7312)
+  >> VACCINATE — Triage Tier 1: essential personnel (medic/security), Stage 2. Loss of this individual multiplies overall casualties. Hot environment / high body mass: progression faster than baseline.
+
+> admit PT-02 45 6 T 4 8
+
+[ADMITTED] PT-02 → NO VACCINE (score: -9999)
+  >> VACCINATE NOW (emergency last resort) — Stage 6 but within the 10-minute window (8 min remaining). Administer immediately. If vaccine fails to halt transformation, proceed to euthanasia protocol.
+
+> queue
+
+══════════════════════════════════════════════
+  PRIORITY QUEUE  (2 patients | 20 vaccine(s) remaining)
+══════════════════════════════════════════════
+
+RANK #1
+┌─────────────────────────────────────────
+│ PT-01       Age: 34   Stage: 2 [ESSENTIAL] [HOT-ENV] [MENTAL:ANXIOUS]
+│ TIER 1 — IMMEDIATE
+│ Score: 7312    Admitted: 14:53:30
+│
+│ >> VACCINATE — Triage Tier 1: essential personnel (medic/security), Stage 2. Loss of this individual multiplies overall casualties. Hot environment / high body mass: progression faster than baseline.
+└─────────────────────────────────────────
+
+RANK #2
+┌─────────────────────────────────────────
+│ PT-02       Age: 45   Stage: 6 [THROAT-RISK] [MENTAL:CRISIS]
+│ NO VACCINE
+│ Score: -9999   Admitted: 14:53:44
+│ ! MENTAL STATE: CRISIS — spread x2.00
+│ ! WITHIN 10-MIN WINDOW: 8 min to full transformation
+│
+│ >> VACCINATE NOW (emergency last resort) — Stage 6 but within the 10-minute window (8 min remaining). Administer immediately. If vaccine fails to halt transformation, proceed to euthanasia protocol.
+└─────────────────────────────────────────
+
+
+> vax
+
+[VACCINATED] PT-01 (Stage 2, Age 34) — 19 dose(s) remaining.
+
+> 
